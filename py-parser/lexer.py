@@ -21,7 +21,7 @@ class CLexer(Lexer):
         WHILE,
         FOR,
         INTCON,
-        EQUAL,
+        EQ,
         NE,
         LE,
         LT,
@@ -58,7 +58,7 @@ class CLexer(Lexer):
 
     INTCON = r'\d+'
 
-    EQUAL = r'=='
+    EQ = r'=='
     NE = r'!='
     LE = r'<='
     LT = r'<'
@@ -111,11 +111,13 @@ class CLexer(Lexer):
 # you need to have sly installed
 if __name__ == '__main__':
     lexer = CLexer()
-    while 1:
+    while True:
         try:
             data = input()
-            data += '\n'
+            data += '\n'  # Manually concatenate a newline to simulate line endings for the lexer
         except EOFError:
             break
         for tok in lexer.tokenize(data):
-            print('(type=%10r, value=%15r, line=%3r)' % (tok.type, tok.value, tok.lineno))
+            print(
+                '(type=%10r, value=%15r, line=%3r)' %
+                (tok.type, tok.value, tok.lineno))
