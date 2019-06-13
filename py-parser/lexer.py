@@ -74,6 +74,12 @@ class CLexer(Lexer):
     DIVIDE = r'/'
     ASSIGN = r'='
 
+    def ignore_comment(self, t):
+        print('LEXER: ignoring block comment')
+
+    def ignore_linecomment(self, t):
+        print('LEXER: ignoring line comment')
+
     # Line number tracking
     @_(r'\n+')
     def ignore_newline(self, t):
