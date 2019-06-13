@@ -41,7 +41,7 @@ class CLexer(Lexer):
 
     ignore = ' \t'
     ignore_linecomment = r'\/\/.*'
-    ignore_comment = r'\/\*[\s\S]*\*\/'
+    ignore_comment = r'\/\*[\s\S]*?\*\/'
 
     ID = r'[a-zA-Z_][a-zA-Z0-9_]*'
 
