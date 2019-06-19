@@ -4,6 +4,8 @@ from lexer import CLexer
 import sys
 from pprint import pprint
 
+# https://sly.readthedocs.io/en/latest/sly.html#writing-a-lexer
+
 
 class CParser(Parser):
 
@@ -21,9 +23,12 @@ class CParser(Parser):
         ('right', NOT, UMINUS)
     )
 
+    freq = {'param_types': 0, 'func': 0, 'var_decl': 0, 'expr': 0, 'opt_expr': 0, 'assg': 0, 'opt_assg': 0}
+
     # Called in every grammar-handling function, put prints and other stuff
     # for debugging
     def action(self, p):
+        pprint(vars(p))
         pprint(p._stack)
         print('\n\n')
 
@@ -49,6 +54,7 @@ class CParser(Parser):
 
     @_('ID')
     def var_decl(self, p):
+        self.freq['var_decl'] += 1
         self.action(p)
         self.v += 1
         return self.v
@@ -61,6 +67,7 @@ class CParser(Parser):
 
     @_('VOID')
     def param_types(self, p):
+        self.freq['param_types'] += 1
         self.action(p)
         self.v += 1
         return self.v
@@ -68,6 +75,7 @@ class CParser(Parser):
     @_('var_type ID "(" param_types ")" "{" typedecs stmts "}"',
        'VOID ID "(" param_types ")" "{" typedecs stmts "}"')
     def func(self, p):
+        self.freq['func'] += 1
         self.action(p)
         self.v += 1
         return self.v
@@ -99,18 +107,21 @@ class CParser(Parser):
 
     @_('assg', 'empty')
     def opt_assg(self, p):
+        self.freq['opt_assg'] += 1
         self.action(p)
         self.v += 1
         return self.v
 
     @_('expr', 'empty')
     def opt_expr(self, p):
+        self.freq['opt_expr'] += 1
         self.action(p)
         self.v += 1
         return self.v
 
     @_('ID ASSIGN expr')
     def assg(self, p):
+        self.freq['assg'] += 1
         self.action(p)
         self.v += 1
         return self.v
@@ -133,6 +144,7 @@ class CParser(Parser):
        '"(" expr ")"',
        'INTCON')
     def expr(self, p):
+        self.freq['expr'] += 1
         self.action(p)
         self.v += 1
         return self.v
@@ -143,3 +155,6 @@ if __name__ == '__main__':
     parser = CParser()
     with open(sys.argv[1], 'r') as f:
         print(parser.parse(lexer.tokenize(f.read())))
+    
+    for key,val in parser.freq.items():
+        print(key, val)
