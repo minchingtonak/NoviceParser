@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 
 from sly import Lexer
 # import sys
@@ -11,16 +12,22 @@ class CLexer(Lexer):
 
     tokens = {
         ID,
-        EXTERN,
+        # EXTERN,
         VOID,
-        RETURN,
-        CHAR,
+        # RETURN,
+        # CHAR,
         INT,
-        IF,
-        ELSE,
-        WHILE,
+        # IF,
+        # ELSE,
+        # WHILE,
         FOR,
         INTCON,
+        PLUSASSIGN,
+        MINUSASSIGN,
+        TIMESASSIGN,
+        DIVIDEASSIGN,
+        INCR,
+        DECR,
         EQ,
         NE,
         LE,
@@ -46,17 +53,24 @@ class CLexer(Lexer):
     ID = r'[a-zA-Z_][a-zA-Z0-9_]*'
 
     # Keywords defined as special cases in the set of IDs
-    ID['extern'] = EXTERN
+    # ID['extern'] = EXTERN
     ID['void'] = VOID
-    ID['return'] = RETURN
-    ID['char'] = CHAR
+    # ID['return'] = RETURN
+    # ID['char'] = CHAR
     ID['int'] = INT
-    ID['if'] = IF
-    ID['else'] = ELSE
-    ID['while'] = WHILE
+    # ID['if'] = IF
+    # ID['else'] = ELSE
+    # ID['while'] = WHILE
     ID['for'] = FOR
 
     INTCON = r'\d+'
+
+    PLUSASSIGN = r'\+='
+    MINUSASSIGN = r'-='
+    TIMESASSIGN = r'\*='
+    DIVIDEASSIGN = r'\/='
+    INCR = r'\+\+'
+    DECR = r'--'
 
     EQ = r'=='
     NE = r'!='
