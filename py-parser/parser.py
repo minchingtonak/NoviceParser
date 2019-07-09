@@ -2,9 +2,8 @@
 
 from sly import Parser
 from lexer import CLexer
-import sys
-from pprint import pprint
 import json
+import sys
 
 # https://sly.readthedocs.io/en/latest/sly.html#writing-a-lexer
 
@@ -289,16 +288,33 @@ class CParser(Parser):
         self.freq['expr']['uminus'] += 1
         return self.action(p)
 
+    def clear_freq(self):
+        for key, val in self.freq.items():
+            if isinstance(val, int):
+                self.freq[key] = 0
+            else:
+                for k, v in val.items():
+                    self.freq[key][k] = 0
+
 
 if __name__ == '__main__':
     lexer = CLexer()
     parser = CParser()
-    with open(sys.argv[1], 'r') as f:
-        parser.parse(lexer.tokenize(f.read()))
-
-    # if no output file provided, dump json to stdout instead
-    if (len(sys.argv) < 3):
-        print(json.dumps(parser.freq, indent=4))
-    else:
-        with open(sys.argv[2], 'w') as f:
-            json.dump(parser.freq, f, indent=4)
+    error = False
+    try:
+        with open(sys.argv[1], 'r') as f:
+            parser.parse(lexer.tokenize(f.read()))
+        # if no output file provided, dump json to stdout instead
+        if (len(sys.argv) < 3):
+            print(json.dumps(parser.freq, indent=4))
+        else:
+            with open(sys.argv[2], 'w') as f:
+                json.dump(parser.freq, f, indent=4)
+    except FileNotFoundError:
+        print('Input file not found!')
+        error = True
+    except IndexError:
+        print('Malformed arguments!')
+        error = True
+    if error:
+        print('Usage: ' + sys.argv[0] + ' INPUTFILE [OUTPUTFILE]')
