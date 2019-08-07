@@ -124,7 +124,10 @@ class CParser(Parser):
         return self.action(p)
 
     @_('FOR "(" opt_assg ";" opt_expr ";" opt_assg ")" stmt',
-       'assg ";"', '"{" stmts "}"', '";"')
+       'WHILE "(" opt_expr ")" stmt',
+       'assg ";"',
+       '"{" stmts "}"', 
+       '";"')
     def stmt(self, p):
         return self.action(p)
 

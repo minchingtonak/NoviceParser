@@ -19,7 +19,7 @@ class CLexer(Lexer):
         INT,
         # IF,
         # ELSE,
-        # WHILE,
+        WHILE,
         FOR,
         INTCON,
         PLUSASSIGN,
@@ -62,7 +62,7 @@ class CLexer(Lexer):
     ID['int'] = INT
     # ID['if'] = IF
     # ID['else'] = ELSE
-    # ID['while'] = WHILE
+    ID['while'] = WHILE
     ID['for'] = FOR
 
     INTCON = r'\d+'
