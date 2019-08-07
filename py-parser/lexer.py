@@ -28,6 +28,8 @@ class CLexer(Lexer):
         DIVIDEASSIGN,
         INCR,
         DECR,
+        LEFTSHIFT,
+        RIGHTSHIFT,
         EQ,
         NE,
         LE,
@@ -72,6 +74,8 @@ class CLexer(Lexer):
     INCR = r'\+\+'
     DECR = r'--'
 
+    LEFTSHIFT = r'<<'
+    RIGHTSHIFT = r'>>'
     EQ = r'=='
     NE = r'!='
     LE = r'<='

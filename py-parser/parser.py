@@ -20,6 +20,7 @@ class CParser(Parser):
         ('nonassoc', EQ, NE),
         ('nonassoc', LE, LT),
         ('nonassoc', GE, GT),
+        ('left', LEFTSHIFT, RIGHTSHIFT),
         ('left', OR, AND),
         ('right', NOT, UMINUS),
         ('right', PREINCR, PREDECR)
@@ -40,6 +41,8 @@ class CParser(Parser):
             '<': 0,
             '>=': 0,
             '>': 0,
+            '<<': 0,
+            '>>': 0,
             '!': 0,
             '&&': 0,
             '||': 0,
@@ -244,6 +247,16 @@ class CParser(Parser):
         return self.action(p)
 
     @_('expr GT expr')
+    def expr(self, p):
+        self.freq['expr'][p[1]] += 1
+        return self.action(p)
+
+    @_('expr LEFTSHIFT expr')
+    def expr(self, p):
+        self.freq['expr'][p[1]] += 1
+        return self.action(p)
+
+    @_('expr RIGHTSHIFT expr')
     def expr(self, p):
         self.freq['expr'][p[1]] += 1
         return self.action(p)
