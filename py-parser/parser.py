@@ -2,6 +2,7 @@
 
 from sly import Parser
 from lexer import CLexer
+from pprint import pprint
 import json
 import sys
 
@@ -69,6 +70,8 @@ class CParser(Parser):
     # Called in every grammar-handling function, put prints and other stuff
     # for debugging
     def action(self, p):
+        if len(p._namemap) > 1:
+            print(p[1])
         self.v += 1
         return self.v
         # pprint(vars(p))
