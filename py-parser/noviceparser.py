@@ -135,6 +135,7 @@ class NoviceParser(Parser):
 
     @_('FOR "(" assgzero ";" less_than ";" increment ")" stmt')
     def stmt(self, p):
+        print('basic increasing for')
         return self.action(p)
 
     # @_('assg', 'empty')
@@ -165,7 +166,7 @@ class NoviceParser(Parser):
         return self.action(p)
 
     @_('ID ASSIGN ZEROCON')
-    def assgzero(self, p):
+    def assg(self, p):
         self.freq['assg']['='] += 1 # change
         return self.action(p)
 
