@@ -21,7 +21,9 @@ class NoviceLexer(Lexer):
         # ELSE,
         WHILE,
         FOR,
-        INTCON,
+        # INTCON,
+        NONZEROCON,
+        ZEROCON,
         PLUSASSIGN,
         MINUSASSIGN,
         TIMESASSIGN,
@@ -134,13 +136,13 @@ class NoviceLexer(Lexer):
 
     # Wrapper for superclass tokenize to take care of line counting
     def tokenize(self, data):
-        return super(CLexer, self).tokenize(data, lineno=self.lineno)
+        return super(NoviceLexer, self).tokenize(data, lineno=self.lineno)
 
 
 # Run this code with `python3 lexer.py < intputfile.c`
 # you need to have sly installed
 if __name__ == '__main__':
-    lexer = CLexer()
+    lexer = NoviceLexer()
     while True:
         try:
             data = input()

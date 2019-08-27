@@ -70,9 +70,9 @@ class NoviceParser(Parser):
     # Called in every grammar-handling function, put prints and other stuff
     # for debugging
     def action(self, p):
-        if len(p._namemap) > 1:
-            print(p[1])
-        self.v += 1
+        # if len(p._namemap) > 1:
+        #     print(p[1])
+        # self.v += 1
         return self.v
         # pprint(vars(p))
         # pprint(p._stack)
@@ -138,10 +138,19 @@ class NoviceParser(Parser):
         print('basic increasing for')
         return self.action(p)
 
-    # @_('assg', 'empty')
-    # def opt_assg(self, p):
-    #     self.freq['opt_assg'] += 1
-    #     return self.action(p)
+    @_('FOR "(" opt_assg ";" opt_expr ";" opt_assg ")" stmt')
+    def stmt(self, p):
+        print('normal for')
+        return self.action(p)
+
+    # BEGIN SPECIAL LOOPS
+
+   
+
+    @_('assg', 'empty')
+    def opt_assg(self, p):
+        self.freq['opt_assg'] += 1
+        return self.action(p)
 
     @_('expr', 'empty')
     def opt_expr(self, p):
@@ -166,8 +175,9 @@ class NoviceParser(Parser):
         return self.action(p)
 
     @_('ID ASSIGN ZEROCON')
-    def assg(self, p):
-        self.freq['assg']['='] += 1 # change
+    def assgzero(self, p):
+        print("ASSGZERO")
+        self.freq['assg']['='] += 1  # change
         return self.action(p)
 
     @_('ID PLUSASSIGN expr')
@@ -192,6 +202,7 @@ class NoviceParser(Parser):
 
     @_('ID INCR')
     def increment(self, p):
+        print('increment')
         self.freq['assg']['++'] += 1
         return self.action(p)
 
@@ -212,7 +223,10 @@ class NoviceParser(Parser):
 
     @_('ID',
         '"(" expr ")"',
-        'INTCON')
+        'ZEROCON',
+        'NONZEROCON'
+        # 'INTCON'
+       )
     def expr(self, p):
         return self.action(p)
 
@@ -247,12 +261,12 @@ class NoviceParser(Parser):
         return self.action(p)
 
     @_('expr LE expr')
-    def less_than(self, p):
+    def expr(self, p):
         self.freq['expr'][p[1]] += 1
         return self.action(p)
 
     @_('expr LT expr')
-    def expr(self, p):
+    def less_than(self, p):
         self.freq['expr'][p[1]] += 1
         return self.action(p)
 
