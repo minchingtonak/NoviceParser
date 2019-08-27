@@ -138,14 +138,15 @@ class NoviceParser(Parser):
         print('basic increasing for')
         return self.action(p)
 
+    @_('FOR "(" assgzero ";" less_than ";" larger_incrementer ")" stmt')
+    def stmt(self, p):
+        print('increasing >1 for')
+        return self.action(p)
+
     @_('FOR "(" opt_assg ";" opt_expr ";" opt_assg ")" stmt')
     def stmt(self, p):
         print('normal for')
         return self.action(p)
-
-    # BEGIN SPECIAL LOOPS
-
-   
 
     @_('assg', 'empty')
     def opt_assg(self, p):
@@ -176,12 +177,16 @@ class NoviceParser(Parser):
 
     @_('ID ASSIGN ZEROCON')
     def assgzero(self, p):
-        print("ASSGZERO")
         self.freq['assg']['='] += 1  # change
         return self.action(p)
 
     @_('ID PLUSASSIGN expr')
     def assg(self, p):
+        self.freq['assg']['+='] += 1
+        return self.action(p)
+
+    @_('ID PLUSASSIGN NONZEROCON') # only when larger than 1?
+    def larger_incrementer(self, p):
         self.freq['assg']['+='] += 1
         return self.action(p)
 
@@ -202,7 +207,6 @@ class NoviceParser(Parser):
 
     @_('ID INCR')
     def increment(self, p):
-        print('increment')
         self.freq['assg']['++'] += 1
         return self.action(p)
 
