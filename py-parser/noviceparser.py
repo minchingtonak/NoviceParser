@@ -65,7 +65,12 @@ class NoviceParser(Parser):
             'pre++': 0,
             'pre--': 0,
         },
-        'opt_assg': 0}
+        'opt_assg': 0,
+        'basic_incr_for': 0,
+        '>1_incr_for': 0,
+        'basic_decr_for': 0,
+        'ne_for': 0
+        }
 
     # Called in every grammar-handling function, put prints and other stuff
     # for debugging
@@ -133,15 +138,30 @@ class NoviceParser(Parser):
     def stmt(self, p):
         return self.action(p)
 
+    # Special for loop grammars
+
     @_('FOR "(" assgzero ";" less_than ";" increment ")" stmt')
     def stmt(self, p):
-        print('basic increasing for')
+        self.freq['basic_incr_for'] += 1
         return self.action(p)
 
     @_('FOR "(" assgzero ";" less_than ";" larger_incrementer ")" stmt')
     def stmt(self, p):
-        print('increasing >1 for')
+        self.freq['>1_incr_for'] += 1
         return self.action(p)
+
+    @_('FOR "(" assgnonzero ";" greater_than ";" decrement ")" stmt')
+    def stmt(self, p):
+        self.freq['basic_decr_for'] += 1
+        return self.action(p)
+
+    @_('FOR "(" assgzero ";" not_equal ";" assg ")" stmt',
+       'FOR "(" assgnonzero ";" not_equal ";" assg ")" stmt')
+    def stmt(self, p):
+        self.freq['ne_for'] += 1
+        return self.action(p)
+
+    # Catch-all for loop grammar
 
     @_('FOR "(" opt_assg ";" opt_expr ";" opt_assg ")" stmt')
     def stmt(self, p):
@@ -180,6 +200,11 @@ class NoviceParser(Parser):
         self.freq['assg']['='] += 1  # change
         return self.action(p)
 
+    @_('ID ASSIGN NONZEROCON')
+    def assgnonzero(self, p):
+        self.freq['assg']['='] += 1  # change
+        return self.action(p)
+
     @_('ID PLUSASSIGN expr')
     def assg(self, p):
         self.freq['assg']['+='] += 1
@@ -211,7 +236,7 @@ class NoviceParser(Parser):
         return self.action(p)
 
     @_('ID DECR')
-    def assg(self, p):
+    def decrement(self, p):
         self.freq['assg']['--'] += 1
         return self.action(p)
 
@@ -260,7 +285,7 @@ class NoviceParser(Parser):
         return self.action(p)
 
     @_('expr NE expr')
-    def expr(self, p):
+    def not_equal(self, p):
         self.freq['expr'][p[1]] += 1
         return self.action(p)
 
@@ -280,7 +305,7 @@ class NoviceParser(Parser):
         return self.action(p)
 
     @_('expr GT expr')
-    def expr(self, p):
+    def greater_than(self, p):
         self.freq['expr'][p[1]] += 1
         return self.action(p)
 
