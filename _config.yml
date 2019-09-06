@@ -23,8 +23,8 @@ github_username:  jekyll
 
 # Build settings
 markdown: kramdown
-# theme: jekyll-theme-midnight
-remote_theme: pages-themes/midnight
+theme: jekyll-theme-midnight
+# remote_theme: pages-themes/midnight
 plugins:
   - jekyll-feed
 
